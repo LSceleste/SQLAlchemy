@@ -106,7 +106,7 @@ def test_func():
    # Reutrn data from query
    obs_results = session.query(func.count(Measurement.tobs)).\
                                      all()
-   # Build results into list, note position 0 = station, 1 = min temp, 2 = max temp, 3 = avg temp
+ 
 
    return jsonify(obs_results)
 
@@ -129,21 +129,12 @@ def start_end(start,end=None):
     
     results = session.query(*selector)\
         .filter(Measurement.date >= start_date)\
-        .filter(Measurement.date <= end_date).all()  #.group_by(Measurement.date).all()
+        .filter(Measurement.date <= end_date).all()
     print(results)
-    #temps2 = [result[0] for result in results]
+    
     temps2 = list(np.ravel(results))
     return jsonify(temps2)
 
 if __name__ == '__main__':
     app.run(debug=True)
 
-
-#@app.route("/api/v1.0/<start>")
-#def min_max_avg(start):
-#    """Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
-#   When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date."""
-#
-#   temps = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-#   filter(Measurement.date >= start).all()       
-#    return jsonify(list(temps))
